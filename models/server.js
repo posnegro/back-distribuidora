@@ -9,6 +9,10 @@ class Server {
 
     this.app = express();
     this.usuariosPath = "/api/usuarios";
+    this.authPath = "/api/auth"
+    this.categoriasPath ='/api/categorias'
+    this.productosPath = "/api/productos"
+    this.categorias2Path = "/api/categorias2"
 
     this.conectarDB();
 
@@ -32,7 +36,12 @@ class Server {
         this.app.use(express.urlencoded({extended:true}))
     }
     routes() {
+        this.app.use(this.authPath,require("../routes/auth"))
         this.app.use(this.usuariosPath, require("../routes/usuarios"))
+        this.app.use(this.categoriasPath, require("../routes/categorias"))
+        this.app.use(this.productosPath, require("../routes/productos"))
+        this.app.use(this.categorias2Path, require ("../routes/categorias2"))
+
     }
 
     listen() {
