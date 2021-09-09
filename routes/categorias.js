@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator"); 
 
-const { existeCategoria, existeCategoria2 } = require("../helpers/db-validators");
+const { existeCategoria} = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJwt } = require("../middlewares/validar-jwt");
 const { esAdminRol } = require("../middlewares/validar-rol");
@@ -36,7 +36,8 @@ router.post(
     validarJwt,
     esAdminRol,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    check("categoriaPadre", "categoria obligatoria").not().isEmpty(),
+    check("categoriaP", "No es un ID válido").isMongoId(),
+    validarCampos,
   ],
   crearCategorias,
 

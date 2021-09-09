@@ -1,7 +1,6 @@
 const { request, response,  } = require('express')
 const Usuario = require('../models/usuario')
 const bcryptjs = require("bcryptjs"); 
-const {validationResult} = require ("express-validator")
 
 const usuariosGet = async(req=request, res=response) => {
 
@@ -17,7 +16,7 @@ const usuariosGet = async(req=request, res=response) => {
     const total = await Usuario.countDocuments({estado:true})
     res.json({
         Total:total,
-        usuarios
+        usuarios,
        });
 }
 
@@ -52,7 +51,6 @@ const usuariosPut = async(req=request, res=response) => {
 
     const usuario = await Usuario.findByIdAndUpdate(id,resto, {new:true});
     res.json({
-        msg :'put users',
         usuario,
        });
 }
@@ -63,7 +61,6 @@ const usuariosDelete = async (req=request, res=response) => {
     //const usuario = await Usuario.findByIdAndDelete(id);
     const usuario = await Usuario.findByIdAndUpdate(id,{estado:false}, {new:true});
     res.json({
-        msg :'delete users',
         usuario,
        });
 }

@@ -50,11 +50,27 @@ const crearProductos = async (req, res = response) => {
 
   const productoDB = await Producto.findOne({
     nombre: body.nombre.toUpperCase(),
+});
+  const productoDB1 = await Producto.findOne({
+    cod_Producto : body.cod_Producto,
+  });
+  const productoDB2 = await Producto.findOne({
+    cod_Barras: body.cod_Barras,
   });
 
   if (productoDB) {
     return res.status(400).json({
       msg: `El producto ${productoDB.nombre} ya existe`,
+    });
+  }
+  if (productoDB1) {
+    return res.status(400).json({
+      msg: `El cod producto ${productoDB1.cod_Producto} ya existe`,
+    });
+  }
+  if (productoDB2) {
+    return res.status(400).json({
+      msg: `El cod Barras ${productoDB2.cod_Barras} ya existe`,
     });
   }
 

@@ -16,14 +16,10 @@ const CategoriaSchema = new Schema ({
         ref:"Usuario",
         required:true
     },
-    padreCat:{
-        type:Schema.Types.ObjectId,
-        ref:"Categoria2",
-        required:true
-    },
-    categoriaPadre:{
-        type: String,
-        required:true
+    categoriaP :{
+        type: Schema.Types.ObjectId,
+        ref: "CategoriaP",
+        required: true,
     }
 });
 

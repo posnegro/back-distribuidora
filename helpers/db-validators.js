@@ -1,7 +1,8 @@
-const Categoria  = require("../models/categoria")
-const Producto = require("../models/producto")
+const Categoria  = require("../models/categoria");
+const categoriaPadre = require("../models/categoriaPadre");
 const Usuario = require("../models/usuario");
-const Categoria2 = require("../models/categoria_2")
+const Producto = require("../models/producto");
+
 
 
 const emailExiste = async (email = "") => {
@@ -28,8 +29,8 @@ const existeCategoria = async (id) => {
   }
 };
 
-const existeCategoria2 = async (id) => {
-  const existeCat = await Categoria2.findById(id);
+const existeCategoriaP = async (id) => {
+  const existeCat = await categoriaPadre.findById(id);
 
   if (!existeCat) {
     throw new Error(`El id ${id} no existe`);
@@ -49,7 +50,7 @@ module.exports = {
   emailExiste,
   idExiste,
   existeCategoria,
-  existeCategoria2,
   existeProducto,
+  existeCategoriaP
   
 };

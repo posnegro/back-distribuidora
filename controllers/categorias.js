@@ -44,21 +44,26 @@ const obtenerCategoria = async (req, res = response) => {
 
 //Crear categoria----------------------------------------
 const crearCategorias = async (req, res = response) => {
-  const { estado, usuario, ...body } = req.body;
+  const { usuario, ...body } = req.body;
 
-  const categoriaDB = await Categoria.findOne({ nombre : req.body.nombre.toUpperCase(),
-  });
-
+  //verificar si la categoria existe
+  const categoriaDB = await Categoria.findOne({ nombre :body.nombre.toUpperCase() });
+  const categoriaDB1 = await Categoria.findOne({ categoriaP :body.categoriaP, })
   if (categoriaDB) {
     return res.status(400).json({
       msg: `La categoría ${categoriaDB.nombre} ya existe`,
+    });
+  }
+  if (categoriaDB1) {
+    return res.status(400).json({
+      msg: `el ${categoriaDB1.categoriaP} no existe `,
     });
   }
 
   //Generar la data
   const data = {
     ...body,
-    nombre : body.nombre.toUpperCase(),
+    nombre :body.nombre.toUpperCase(),
     usuario: req.usuario._id,
   };
 
