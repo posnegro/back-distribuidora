@@ -4,21 +4,23 @@ const Producto = require("../models/producto");
 //obtener Productos- paginado- total- populate
 
 const obtenerProductos = async (req, res = response) => {
-  let { limite = 5, desde = 0 } = req.query;
+  let { limite = 4, desde = 0 } = req.query;
 
   limite = Number(limite);
   desde = Number(desde);
 
   if (isNaN(limite)) {
-    limite = 5;
+    limite = 4;
   }
   if (isNaN(desde)) {
     desde = 0;
   }
 
+
   const [total, productos] = await Promise.all([
     Producto.countDocuments({ estado: true }),
     Producto.find({ estado: true })
+      .sort("nombre")
       .skip(desde)
       .limit(limite)
       .populate("usuario", "nombre email")
@@ -50,12 +52,6 @@ const crearProductos = async (req, res = response) => {
 
   const productoDB = await Producto.findOne({
     nombre: body.nombre.toUpperCase(),
-});
-  const productoDB1 = await Producto.findOne({
-    cod_Producto : body.cod_Producto,
-  });
-  const productoDB2 = await Producto.findOne({
-    cod_Barras: body.cod_Barras,
   });
 
   if (productoDB) {
@@ -63,16 +59,8 @@ const crearProductos = async (req, res = response) => {
       msg: `El producto ${productoDB.nombre} ya existe`,
     });
   }
-  if (productoDB1) {
-    return res.status(400).json({
-      msg: `El cod producto ${productoDB1.cod_Producto} ya existe`,
-    });
-  }
-  if (productoDB2) {
-    return res.status(400).json({
-      msg: `El cod Barras ${productoDB2.cod_Barras} ya existe`,
-    });
-  }
+
+
 
   const data = {
     ...body,
@@ -92,12 +80,22 @@ const crearProductos = async (req, res = response) => {
 //Actualizar categoria--------------------------------
 const actualizarProducto = async (req, res = response) => {
   const { id } = req.params;
-  const { _id, estado, usuario, ...resto } = req.body;
+  const { _id, estado, ...resto } = req.body;
 
-  if (resto.nombre) {
+
+  const productoDB = await Producto.findOne({
+    nombre: resto.nombre.toUpperCase(),
+  });
+
+  if (productoDB) {
+    return res.status(400).json({
+      msg: `El producto ${productoDB.nombre} ya existe`,
+    });}
+
+  else{
     resto.nombre = resto.nombre.toUpperCase();
+    resto.usuario = req.usuario._id;
   }
-  resto.usuario = req.usuario._id;
 
   const producto = await Producto.findByIdAndUpdate(id, resto, {
     new: true,

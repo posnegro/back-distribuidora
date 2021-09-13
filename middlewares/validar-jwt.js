@@ -1,50 +1,48 @@
+const { request, response } = require("express");
+const jwt = require("jsonwebtoken");
+const Usuario = require("../models/usuario");
 
-const { request, response } = require('express')
-const jwt = require('jsonwebtoken')
-const Usuario = require('../models/usuario')
+const validarJWT = async (req = request, res = response, next) => {
+  const token = req.header("x-token");
+  //   console.log(token);
+  if (!token) {
+    return res.status(401).json({
+      msg: "No hay token en la petición",
+    });
+  }
 
-const validarJwt = async(req=request, res = response, next) => {
+  try {
+    const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
 
-    const token = req.header("x-token")
+    //leer usuario
+    const usuario = await Usuario.findById(uid);
 
-    if(!token){
-        return res.status(401).json({
-            msg:"No hay token en la peticion"
-        })
+    //si el usuario no existe
+    if (!usuario) {
+      return res.status(401).json({
+        msg: "Token no válido - usuario no existe",
+      });
     }
-    try {
-    
-        const {uid} = jwt.verify(token,process.env.SECRETORPRIVATEKEY);
 
-        //LEER USUARIO
-        const usuario = await Usuario.findById(uid)
-
-        //SI EL USUARIO EXISTE
-
-        if(!usuario){
-            return res.status(401).json({
-                msg:"Token no es valido - usuario no existe"
-            })
-        }
-
-        //VERIFICAR SI EL UID ES DE UN USUARIO ACTIVO
-        if(!usuario.estado){
-            return res.status(401).json({
-                msg:"Token no valido - usuario inactivo"
-            })
-        }
-        
-        req.usuario= usuario;
-
-        next()
-    } catch (error) {
-        res.status(401).json({
-            msg: "Token no valido",
-        })
-        
+    //verificar si el uid tiene estado en true
+    if (!usuario.estado) {
+      return res.status(401).json({
+        msg: "Token no válido - usuario inactivo",
+      });
     }
+
+    req.usuario = usuario;
+
+    req.uid = uid;
+
+    next();
+  } catch (error) {
+    res.status(401).json({
+      msg: "Token no válido",
+    });
+  }
 };
 
 module.exports = {
-    validarJwt,
-}
+  validarJWT,
+};

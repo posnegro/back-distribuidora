@@ -1,6 +1,8 @@
 const { response } = require("express");
 const Categoria = require("../models/categoria");
 
+//obtener categorias- paginado- total- populate
+
 const obtenerCategorias = async (req, res = response) => {
   let { limite = 5, desde = 0 } = req.query;
 
@@ -8,7 +10,7 @@ const obtenerCategorias = async (req, res = response) => {
   desde = Number(desde);
 
   if (isNaN(limite)) {
-    limite = 5; 
+    limite = 5;
   }
   if (isNaN(desde)) {
     desde = 0;
@@ -42,21 +44,15 @@ const obtenerCategoria = async (req, res = response) => {
   });
 };
 
-//Crear categoria----------------------------------------
+//Crear categoria
 const crearCategorias = async (req, res = response) => {
   const { usuario, ...body } = req.body;
 
   //verificar si la categoria existe
   const categoriaDB = await Categoria.findOne({ nombre :body.nombre.toUpperCase() });
-  const categoriaDB1 = await Categoria.findOne({ categoriaP :body.categoriaP, })
   if (categoriaDB) {
     return res.status(400).json({
       msg: `La categoría ${categoriaDB.nombre} ya existe`,
-    });
-  }
-  if (categoriaDB1) {
-    return res.status(400).json({
-      msg: `el ${categoriaDB1.categoriaP} no existe `,
     });
   }
 
@@ -78,8 +74,17 @@ const crearCategorias = async (req, res = response) => {
 const actualizarCategoria = async (req, res = response) => {
   const { id } = req.params;
   const { _id, ...resto } = req.body;
+
+  const categoriaDB = await Categoria.findOne({ nombre :resto.nombre.toUpperCase() });
   
+  if (categoriaDB) {
+    return res.status(400).json({
+      msg: `La categoría ${categoriaDB.nombre} ya existe`,
+    });
+  }
+  else{
   resto.nombre = resto.nombre.toUpperCase();
+  resto.usuario = req.usuario._id;}
 
   const categoria = await Categoria.findByIdAndUpdate(id, resto, {
     new: true,
@@ -91,7 +96,7 @@ const actualizarCategoria = async (req, res = response) => {
   });
 };
 
-//Borrar Categoria------------------------------------
+//Borrar Categoria
 const borrarCategoria = async (req, res = response) => {
   const { id } = req.params;
 
