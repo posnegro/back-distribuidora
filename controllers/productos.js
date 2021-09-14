@@ -4,13 +4,13 @@ const Producto = require("../models/producto");
 //obtener Productos- paginado- total- populate
 
 const obtenerProductos = async (req, res = response) => {
-  let { limite = 4, desde = 0 } = req.query;
+  let { limite = 5, desde = 0 } = req.query;
 
   limite = Number(limite);
   desde = Number(desde);
 
   if (isNaN(limite)) {
-    limite = 4;
+    limite = 5;
   }
   if (isNaN(desde)) {
     desde = 0;
@@ -59,7 +59,6 @@ const crearProductos = async (req, res = response) => {
       msg: `El producto ${productoDB.nombre} ya existe`,
     });
   }
-
 
 
   const data = {

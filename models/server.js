@@ -20,6 +20,8 @@ class Server {
     this.buscarProdPath = "/api/buscarprod";
      //ruta categorias de la categorias Padre
     this.categoriaPadrePath = "/api/categoriasPadre"
+    // ruta carrito
+    this.carrito = "/api/carrito"
 
     //conexion DB
     this.conectarDB();
@@ -61,6 +63,8 @@ class Server {
     this.app.use(this.buscarProdPath, require("../routes/buscarprod"));
     //ruta de buscar productos por categoria 2
     this.app.use(this.categoriaPadrePath, require("../routes/categoriaP"));
+    // ruta carrito
+    this.app.use(this.carrito, require("../routes/carrito"));
   }
   //funcion para escuchar el puerto
   listen() {

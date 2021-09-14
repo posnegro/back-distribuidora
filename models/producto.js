@@ -37,13 +37,17 @@ const ProductoSchema = new Schema({
     // required: [true, "El codigo es obligatorio"],
     unique: true,
   },
+  image:{
+    type:String,
+  },
   cod_Barras : {
     type: Number,
     // required: [true, "El codigo de barra es obligatorio"],
     unique: true,
   },
   Unidad:{
-    type: String,
+    type: Number,
+    default: 1,
   },
   Alícuota_IVA : {
     type: String,

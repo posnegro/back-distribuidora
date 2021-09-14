@@ -58,7 +58,7 @@ router.post(
     check("email", "El correo no es válido").isEmail(), //midlleware: guarda el error en caso de que no cumpla con ser un email
     check("email").custom(emailExiste),
     // check("rol", "No es un rol permitido").isIn(["ADMIN_ROLE", "USER_ROLE"]),
-    check("rol").custom(esRoleValido), //vara validar el rol
+    // check("rol").custom(esRoleValido), //vara validar el rol
     validarCampos, //valido los campos
   ],
 
