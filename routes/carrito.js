@@ -8,13 +8,11 @@ const { validarJWT } = require("../middlewares/validar-jwt");
 
 const router = Router();
 
-const {crearCarrito, borrarCarrito, obtenerCarritos, obtenerCarrito} = require("../controllers/carrito")
+const {crearCarrito, borrarCarrito, obtenerCarritos, obtenerCarrito, incrementarCarrito} = require("../controllers/carrito")
 
-router.get("/",[validarJWT,
-    validarCampos],obtenerCarritos)
+router.get("/",obtenerCarritos);
 
-router.get("/:id",[validarJWT,
-    validarCampos],obtenerCarrito)
+router.get("/:id",obtenerCarrito);
 
 router.post("/",
     [validarJWT,
@@ -22,8 +20,14 @@ router.post("/",
     ,crearCarrito
 );
 
+router.put("/:id",[
+    validarJWT,
+    validarCampos,
+],incrementarCarrito);
+
 router.delete("/:id",[
-    validarJWT,validarCampos,
+    validarJWT,
+    validarCampos,
 ],borrarCarrito);
 
 module.exports = router;

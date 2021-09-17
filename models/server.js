@@ -18,7 +18,9 @@ class Server {
     this.buscarPath = "/api/buscar";
     //Buscar cproductos por categoria
     this.buscarProdPath = "/api/buscarprod";
-     //ruta categorias de la categorias Padre
+    //Buscar categoria por categoria padre
+    this.buscarcatPath = "/api/buscarcat";
+    //ruta categorias de la categorias Padre
     this.categoriaPadrePath = "/api/categoriasPadre"
     // ruta carrito
     this.carrito = "/api/carrito"
@@ -61,8 +63,10 @@ class Server {
     this.app.use(this.buscarPath, require("../routes/buscar"));
     //ruta de buscar productos por categoria
     this.app.use(this.buscarProdPath, require("../routes/buscarprod"));
-    //ruta de buscar productos por categoria 2
+    //ruta de  categoria 2
     this.app.use(this.categoriaPadrePath, require("../routes/categoriaP"));
+    //ruta de buscar categoria por categoria padre
+    this.app.use(this.buscarcatPath , require("../routes/buscarCategoria"))
     // ruta carrito
     this.app.use(this.carrito, require("../routes/carrito"));
   }

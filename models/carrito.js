@@ -11,12 +11,21 @@ const CarritoSchema = new Schema ({
        default: true,
        required: true,
       },
+      estados :{
+         type:String,
+         require: true,
+         enum: ["PROCESANDO", "PAUSA", "CANCELADO", "CUMPLIDO"],
+      },
     items:[
     {
        type: Schema.Types.ObjectId,
        ref: "Producto",
     },
 ],
+    item: {
+      type: Schema.Types.ObjectId,
+      ref: "Producto",
+   },
 });
 
 module.exports = model("Carrito", CarritoSchema)
