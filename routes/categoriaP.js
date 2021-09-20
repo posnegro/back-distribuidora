@@ -23,7 +23,6 @@ router.get(
     "/:id",
     [
       check("id", "No es un ID válido").isMongoId(),
-      // check("nombre").custom(existeCategoriaP),
       validarCampos,
     ],
     obtenerCategoriaP
@@ -35,8 +34,6 @@ router.post(
       validarJWT,
       esAdminRole,
       check("nombre", "El nombre es obligatorio").not().isEmpty(), 
-      check("id", "No es un ID válido").isMongoId(),
-      check("id").custom(existeCategoriaP),
       validarCampos,
     ],
     crearCategoriasP
@@ -47,7 +44,6 @@ router.put(
     [
       validarJWT,
       check("id", "No es un ID válido").isMongoId(),
-      // check("nombre").custom(existeCategoriaP),
       validarCampos,
     ],
     actualizarCategoriaP
@@ -59,7 +55,6 @@ router.delete(
       validarJWT,
       esAdminRole,
       check("id", "No es un ID válido").isMongoId(),
-      // check("id").custom(existeCategoriaP),
       validarCampos,
     ],
     borrarCategoriaP
