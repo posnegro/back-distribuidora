@@ -1,10 +1,11 @@
 const { Router } = require("express");
-const { check } = require("express-validator"); 
+const { check } = require("express-validator"); //importo para hacer validaciones
 
-const { existeCategoria} = require("../helpers/db-validators");
+const { existeCategoria } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
-const { validarJwt } = require("../middlewares/validar-jwt");
-const { esAdminRol } = require("../middlewares/validar-rol");
+const { validarJWT } = require("../middlewares/validar-jwt");
+const { esAdminRole } = require("../middlewares/validar-roles");
+
 
 const {
   crearCategorias,
@@ -16,9 +17,10 @@ const {
 
 const router = Router();
 
+//Obtener todas las categorias - publico
 router.get("/", obtenerCategorias);
 
-
+//Obtener todas las categoria por id - publico
 router.get(
   "/:id",
   [
@@ -29,25 +31,23 @@ router.get(
   obtenerCategoria
 );
 
-
+//crear categoria privado
 router.post(
   "/",
   [
-    validarJwt,
-    esAdminRol,
+    validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    check("categoriaP", "No es un ID válido").isMongoId(),
     validarCampos,
   ],
-  crearCategorias,
-
+  crearCategorias
 );
 
-
+//actualizar registro por id privado
 router.put(
   "/:id",
   [
-    validarJwt,
+    validarJWT,
+    check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(existeCategoria),
     validarCampos,
@@ -55,12 +55,12 @@ router.put(
   actualizarCategoria
 );
 
-
+//borrar categoria privado - admin
 router.delete(
   "/:id",
   [
-    validarJwt,
-    esAdminRol,
+    validarJWT,
+    esAdminRole,
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(existeCategoria),
     validarCampos,

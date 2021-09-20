@@ -3,11 +3,9 @@ const { check } = require("express-validator"); //importo para hacer validacione
 
 const { existeProducto } = require("../helpers/db-validators");
 const { existeCategoria } = require("../helpers/db-validators");
-
-//middlewares
 const { validarCampos } = require("../middlewares/validar-campos");
-const { validarJwt } = require("../middlewares/validar-jwt");
-const { esAdminRol } = require("../middlewares/validar-rol");
+const { validarJWT } = require("../middlewares/validar-jwt");
+const { esAdminRole } = require("../middlewares/validar-roles");
 
 const {
   obtenerProductos,
@@ -37,11 +35,11 @@ router.get(
 router.post(
   "/",
   [
-    validarJwt,
+    validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("categoria", "No es un ID válido").isMongoId(),
-    check("cod_Producto", "Es necesario el codigo del Producto").not().isEmpty(),
-    check("cod_Barras", "Es necesario el codigo del Barras").not().isEmpty(),
+    check("categoria").custom(existeCategoria),
+
     validarCampos,
   ],
   crearProductos
@@ -51,7 +49,7 @@ router.post(
 router.put(
   "/:id",
   [
-    validarJwt,
+    validarJWT,
 
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(existeProducto),
@@ -64,8 +62,8 @@ router.put(
 router.delete(
   "/:id",
   [
-    validarJwt,
-    esAdminRol,
+    validarJWT,
+    esAdminRole,
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(existeProducto),
     validarCampos,
